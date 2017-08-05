@@ -2,34 +2,6 @@ var print = console.log.bind(console)
 var printd = console.dir.bind(console)
 var h = require('hyperscript')
 
-class NodeBase {
-  constructor() {
-    this.kind = null
-    this.children = []
-  }
-
-  get add() {
-    return this.kind
-  }
-}
-
-class Node extends NodeBase {
-  constructor(kind, parent) {
-    super()
-    this.kind = kind
-    this._parent = parent
-  }
-
-  this(...all) {
-    this.children.push(all)
-
-    return this
-  }
-
-  render() {
-
-  }
-}
 
 class SlimScript {
   constructor(h) {
