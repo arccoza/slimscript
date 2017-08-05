@@ -1,0 +1,14 @@
+{
+  "name": "slimscript",
+  "version": "0.3.0",
+  "description": "A simple, framework agnostic, UI builder.",
+  "main": "index.js",
+  "repository": "https://github.com/arccoza/slimscript",
+  "author": "Adrien <adrien@arccoza.com>",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "hyperscript": "^2.0.2",
+    "react": "^15.6.1"
+  }
+}
