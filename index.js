@@ -34,6 +34,10 @@ class SlimScript {
     return this
   }
 
+  these(kind, list, recur=noop) {
+    // TODO
+  }
+
   parent(count=1) {
     var parent = this.ctx.parent
 
