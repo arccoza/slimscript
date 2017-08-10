@@ -19,12 +19,14 @@ class SlimScript {
   }
 
   comp(kind, props=undefined) {
+    props = props === null ? undefined : props
     this.idx = this.root = {kind, props, children: [], parent: null}
 
     return this
   }
 
   this(kind, props=undefined, predi=noop) {
+    props = props === null ? undefined : props
     var child = {kind, props, predi, children: [], parent: this.ctx}
     this.ctx.children.push(child)
     this.idx = child
@@ -73,7 +75,7 @@ var s = new SlimScript(h)
 var r = s
 .comp('div', {'data-name': 'sam'})
 .add
-.this('ul', undefined, () => true)
+.this('ul', null, () => true)
 .add
 .this('li')
 .add
