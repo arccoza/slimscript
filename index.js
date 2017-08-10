@@ -1,5 +1,6 @@
 var print = console.log.bind(console)
 var printd = console.dir.bind(console)
+var noop = () => undefined
 var h = require('hyperscript')
 
 
@@ -51,7 +52,7 @@ class SlimScript {
     this.content = Array.isArray(content[0]) ? content[0] : content
 
     var rfn = n => {
-      var {kind, props=() => null, children} = n
+      var {kind, props=noop, children} = n
 
       return h(kind, props(), ...children.map(rfn))
     }
