@@ -1,6 +1,6 @@
 var print = console.log.bind(console)
 var printd = console.dir.bind(console)
-var noop = () => undefined
+var noop = (val=undefined) => val
 var h = require('hyperscript')
 
 
@@ -24,8 +24,8 @@ class SlimScript {
     return this
   }
 
-  this(kind, props=undefined, predi=undefined) {
-    var child = {kind, props, children: [], parent: this.ctx}
+  this(kind, props=undefined, predi=noop) {
+    var child = {kind, props, predi, children: [], parent: this.ctx}
     this.ctx.children.push(child)
     this.idx = child
 
@@ -43,8 +43,8 @@ class SlimScript {
     return this
   }
 
-  content() {
-    this.ctx.children.push({kind: undefined, children: () => this.content, isContent: true})
+  content(predi=noop) {
+    this.ctx.children.push({kind: undefined, predi, children: () => this.content, isContent: true})
 
     return this
   }
@@ -54,12 +54,13 @@ class SlimScript {
     this.content = Array.isArray(content[0]) ? content[0] : content
 
     var rfn = n => {
+      var c = []
       var {kind, props=noop, children} = n
 
       if (kind === undefined && n.isContent)
         return children()
 
-      return h(kind, props(), ...children.map(rfn))
+      return h(kind, props(), ...(children.forEach(n => n.predi(true) ? c.push(rfn(n)) : null), c))
     }
 
     var propsMerged = () => Object.assign(this.root.props || {}, props)  // Merge in new root props.
@@ -72,16 +73,25 @@ var s = new SlimScript(h)
 var r = s
 .comp('div', {'data-name': 'sam'})
 .add
-.this('ul')
+.this('ul', undefined, () => true)
 .add
 .this('li')
 .add
-.content()
+.content(() => true)
 .parent(2)
 .add
 .this('hr')
 .content()
 .this('br')
 .render({'data-name': 'bob'}, h('div', {}, h('small', null, 'hola')))
+
+// var r = h('div', {'data-name': 'sam'},
+//   h('ul',
+//     h('li',
+//       h('div', {}, h('small', null, 'hola'))
+// )),
+//   h('hr'),
+//   h('div', {}, h('small', null, 'hola')),
+//   h('br'))
 
 print(r.outerHTML)
