@@ -62,13 +62,15 @@ class SlimScript {
       return h(kind, props(), ...children.map(rfn))
     }
 
-    return rfn(this.root)
+    var propsMerged = () => Object.assign(this.root.props || {}, props)  // Merge in new root props.
+
+    return rfn({kind: this.root.kind, props: propsMerged, children: this.root.children})
   }
 }
 
 var s = new SlimScript(h)
 var r = s
-.comp('div')
+.comp('div', {'data-name': 'sam'})
 .add
 .this('ul')
 .add
@@ -80,6 +82,6 @@ var r = s
 .this('hr')
 .content()
 .this('br')
-.render({}, h('div', {}, h('small', null, 'hola')))
+.render({'data-name': 'bob'}, h('div', {}, h('small', null, 'hola')))
 
 print(r.outerHTML)
