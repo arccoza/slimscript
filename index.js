@@ -17,14 +17,14 @@ class SlimScript {
     return this
   }
 
-  comp(...all) {
-    this.idx = this.root = {kind: all, children: [], parent: null}
+  comp(kind, props=undefined) {
+    this.idx = this.root = {kind, props, children: [], parent: null}
 
     return this
   }
 
-  this(...all) {
-    var child = {kind: all, children: [], parent: this.ctx}
+  this(kind, props=undefined, predi=undefined) {
+    var child = {kind, props, children: [], parent: this.ctx}
     this.ctx.children.push(child)
     this.idx = child
 
@@ -51,8 +51,9 @@ class SlimScript {
     this.content = Array.isArray(content[0]) ? content[0] : content
 
     var rfn = n => {
-      var [type, props=() => null] = n.kind
-      return h(type, props(), ...n.children.map(rfn))
+      var {kind, props=() => null, children} = n
+
+      return h(kind, props(), ...children.map(rfn))
     }
 
     return rfn(this.root)
