@@ -44,7 +44,9 @@ class SlimScript {
   }
 
   content() {
-    this.ctx.children.push(() => this.content)
+    this.ctx.children.push({kind: undefined, children: () => this.content, isContent: true})
+
+    return this
   }
 
   render(props={}, ...content) {
@@ -53,6 +55,9 @@ class SlimScript {
 
     var rfn = n => {
       var {kind, props=noop, children} = n
+
+      if (kind === undefined && n.isContent)
+        return children()
 
       return h(kind, props(), ...children.map(rfn))
     }
@@ -68,9 +73,13 @@ var r = s
 .this('ul')
 .add
 .this('li')
-.parent()
+.add
+.content()
+.parent(2)
 .add
 .this('hr')
-.render()
+.content()
+.this('br')
+.render({}, h('div', {}, h('small', null, 'hola')))
 
 print(r.outerHTML)
