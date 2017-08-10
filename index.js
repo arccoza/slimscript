@@ -42,8 +42,13 @@ class SlimScript {
     return this
   }
 
-  render(props=null, ...children) {
+  content() {
+    this.ctx.children.push(() => this.content)
+  }
+
+  render(props={}, ...content) {
     var h = this.h
+    this.content = Array.isArray(content[0]) ? content[0] : content
 
     var rfn = n => {
       var [type, props=() => null] = n.kind
