@@ -75,7 +75,14 @@ class SlimScript {
   }
 }
 
-var s = new SlimScript(h)
+function slimscript(h) {
+  return new SlimScript(h)
+}
+
+module.exports = slimscript
+
+
+var s = slimscript(h)
 var r = s
 .comp('div', {'data-name': 'sam'})
 .add
